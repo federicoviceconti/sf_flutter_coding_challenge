@@ -37,6 +37,6 @@ Get yourself the latest [flutter](https://flutter.dev/docs/get-started/install) 
 Fork this repo and start coding!
 
 ### MOCKUP
-> You will find StartingFinance's logo among the assets.
+> You will find Starting Finance's logo among the assets.
 
 ![imageMock](https://user-images.githubusercontent.com/50860347/133791077-c3336e33-a233-4481-a82a-d1bd63eebb8b.png)
