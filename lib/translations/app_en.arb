@@ -1,0 +1,11 @@
+{
+  "appName": "CoinApp",
+  "homepageTitleMyWallet": "My wallet",
+  "homepageResidualLiquidity": "Residual liquidity:",
+  "homepageInvestedCapital": "Invested capital:",
+  "homepageMyPositions": "My positions",
+  "homepageCoinItemActualPrice": "Actual price",
+  "homepageCoinItemVariation": "Variation",
+  "homepageCoinItemInWallet": "In wallet",
+  "homepageCoinItemPositionValue": "Position value"
+}
