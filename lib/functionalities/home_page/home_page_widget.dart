@@ -56,33 +56,61 @@ class _HomePageWidgetState extends BaseState<HomePageWidget>
     return Container(
       padding: const EdgeInsets.all(16.0),
       color: AppColor.grayColor,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          MediumText(
-            localizations.homepageTitleMyWallet,
-            fontSize: 26,
-          ),
-          SizedBox(height: 8.0),
-          HeavyText(
-            '\$23.626,05',
-            fontSize: 26,
-          ),
-          SizedBox(height: 2.0),
-          MediumText(
-            '+\$3.626,05 (+18,1%)',
-            color: AppColor.greyTextColor,
-            fontSize: 18,
-          ),
-          SizedBox(height: 20.0),
-          _buildRowMediumHeavyLabel(
-              localizations.homepageResidualLiquidity, '\$1.000,00'),
-          SizedBox(height: 8.0),
-          _buildRowMediumHeavyLabel(
-              localizations.homepageInvestedCapital, '\$22.626,05'),
-          SizedBox(height: 8.0),
-        ],
+      child: Consumer<HomePageViewModel>(
+        builder: (_, viewModel, __) {
+          return Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              MediumText(
+                localizations.homepageTitleMyWallet,
+                fontSize: 26,
+              ),
+              Visibility(
+                visible: viewModel.currentAmountFormatted.isNotEmpty,
+                child: Column(
+                  children: [
+                    SizedBox(height: 8.0),
+                    HeavyText(
+                      viewModel.currentAmountFormatted,
+                      fontSize: 26,
+                    ),
+                  ],
+                ),
+              ),
+              Visibility(
+                visible: viewModel.profitAmountFormatted.isNotEmpty,
+                child: Column(
+                  children: [
+                    SizedBox(height: 2.0),
+                    MediumText(
+                      viewModel.profitAmountFormatted,
+                      color: AppColor.greyTextColor,
+                      fontSize: 18,
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(height: 20.0),
+              _buildRowMediumHeavyLabel(
+                localizations.homepageResidualLiquidity,
+                viewModel.liquidityFormatted,
+              ),
+              Visibility(
+                visible: viewModel.investedCapitalFormatted.isNotEmpty,
+                child: Column(
+                  children: [
+                    SizedBox(height: 8.0),
+                    _buildRowMediumHeavyLabel(
+                        localizations.homepageInvestedCapital,
+                        '${viewModel.investedCapitalFormatted}'),
+                  ],
+                ),
+              ),
+              SizedBox(height: 8.0),
+            ],
+          );
+        },
       ),
     );
   }
@@ -153,8 +181,8 @@ class _HomePageWidgetState extends BaseState<HomePageWidget>
                 _buildHeaderItem(
                   coinAcronym: asset.acronym,
                   coinName: asset.name,
-                  coinValue: asset.value,
-                  increase: asset.increase,
+                  coinValue: asset.valueFormatted,
+                  increase: asset.increaseFormatted,
                 ),
                 Visibility(
                   visible: isExpanded,
@@ -208,7 +236,7 @@ class _HomePageWidgetState extends BaseState<HomePageWidget>
           label,
           color: AppColor.greyTextColor,
         ),
-        SizedBox(width: 8.0),
+        SizedBox(width: 4.0),
         HeavyText(
           value,
           color: AppColor.greyTextColor,
@@ -226,10 +254,10 @@ class _HomePageWidgetState extends BaseState<HomePageWidget>
   }
 
   Widget _buildHeaderItem({
-    required String coinAcronym,
-    required String coinName,
-    required String coinValue,
-    required String increase,
+    String? coinAcronym,
+    String? coinName,
+    String? coinValue,
+    String? increase,
   }) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
@@ -247,12 +275,12 @@ class _HomePageWidgetState extends BaseState<HomePageWidget>
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               HeavyText(
-                coinAcronym,
+                coinAcronym ?? '',
                 fontSize: 20,
               ),
               SizedBox(height: 4.0),
               MediumText(
-                coinName,
+                coinName ?? '',
                 align: TextAlign.end,
                 color: AppColor.greyTextColor,
                 fontSize: 16,
@@ -265,12 +293,12 @@ class _HomePageWidgetState extends BaseState<HomePageWidget>
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             HeavyText(
-              coinValue,
+              coinValue ?? '',
               fontSize: 20,
             ),
             SizedBox(height: 4.0),
             MediumText(
-              increase,
+              increase ?? '',
               color: AppColor.greyTextColor,
               align: TextAlign.end,
               fontSize: 16,
@@ -289,22 +317,22 @@ class _HomePageWidgetState extends BaseState<HomePageWidget>
         SizedBox(height: 16.0),
         _buildRowPositionValue(
           localizations.homepageCoinItemActualPrice,
-          asset.actualPrice,
+          asset.actualPriceFormatted,
         ),
         SizedBox(height: 8.0),
         _buildRowPositionValue(
           localizations.homepageCoinItemVariation,
-          asset.variation,
+          '',
         ),
         SizedBox(height: 8.0),
         _buildRowPositionValue(
           localizations.homepageCoinItemInWallet,
-          asset.inWallet,
+          asset.inWallet.toString(),
         ),
         SizedBox(height: 8.0),
         _buildRowPositionValue(
           localizations.homepageCoinItemPositionValue,
-          asset.positionValue,
+          asset.valueFormatted,
         ),
       ],
     );

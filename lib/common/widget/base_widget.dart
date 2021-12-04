@@ -55,8 +55,9 @@ class BaseWidget extends StatelessWidget {
       width: MediaQuery.of(context).size.width,
       child: bottom != null
           ? Padding(
-              padding: const EdgeInsets.symmetric(
-                vertical: 10.0,
+              padding: const EdgeInsets.only(
+                top: 6.0,
+                bottom: 16.0
               ),
               child: bottom,
             )

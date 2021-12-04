@@ -10,6 +10,7 @@ import 'package:sf_flutter_coding_challenge/functionalities/home_page/home_page_
 import 'package:sf_flutter_coding_challenge/functionalities/home_page/home_page_service.dart';
 
 import 'common/config/coin_app_config.dart';
+import 'common/config/coin_app_constants.dart';
 import 'common/navigation/coin_navigation.dart';
 import 'common/navigation/coin_navigation_impl.dart';
 import 'common/theme/app_theme.dart';
@@ -55,8 +56,15 @@ class CoinApp extends StatelessWidget {
   }
 
   List<SingleChildWidget> _initProviders() {
-    final apiKey = String.fromEnvironment("API_KEY");
-    final baseUrlCoinCap = String.fromEnvironment("COIN_CAP_BASE_URL");
+    const apiKey = const String.fromEnvironment(
+      CoinAppConstants.API_KEY,
+      defaultValue: '',
+    );
+
+    const baseUrlCoinCap = const String.fromEnvironment(
+      CoinAppConstants.COIN_CAP_BASE_URL,
+      defaultValue: '',
+    );
 
     return [
       Provider<CoinNavigation>(

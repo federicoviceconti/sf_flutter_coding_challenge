@@ -3,14 +3,17 @@ import 'package:http/src/response.dart';
 import 'package:sf_flutter_coding_challenge/common/config/app_config.dart';
 import 'package:sf_flutter_coding_challenge/common/http/client/base_coin_client.dart';
 import 'package:sf_flutter_coding_challenge/common/http/model/base_http_response.dart';
-import 'package:sf_flutter_coding_challenge/common/http/model/error_http_response.dart';
 import 'package:sf_flutter_coding_challenge/common/http/model/http_result.dart';
 import 'package:http/http.dart' as http;
+
+import 'exception/error_http_exception.dart';
 
 class CoinCapClient extends BaseCoinClient {
   final String headerAuthorization = 'Authorization';
   final String getMethod = 'GET';
   final String postMethod = 'POST';
+  final int okStatusCode = 200;
+  final int genericErrorStatusCode = 500;
 
   CoinCapClient(AppConfig config)
       : super(
@@ -79,14 +82,26 @@ class CoinCapClient extends BaseCoinClient {
         body: body,
       );
 
-      return HttpResult(
-        result: convertFunc(response),
+      if (response.statusCode == okStatusCode) {
+        return HttpResult(
+          statusCode: okStatusCode,
+          result: convertFunc(response),
+        );
+      } else {
+        throw ErrorHttpException.fromResponse(response);
+      }
+    } on ErrorHttpException catch (e) {
+      _logException(e, method: method, path: path);
+      return Future.value(
+        HttpResult<T>(
+          statusCode: e.response?.statusCode,
+        ),
       );
     } on Exception catch (e) {
       _logException(e, method: method, path: path);
       return Future.value(
         HttpResult<T>(
-          error: ErrorHttpResponse(),
+          statusCode: genericErrorStatusCode,
         ),
       );
     }
