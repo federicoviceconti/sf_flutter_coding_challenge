@@ -7,13 +7,15 @@ abstract class BaseText extends StatelessWidget {
   final FontWeight? fontWeight;
   final Color? color;
   final TextOverflow? overflow;
+  final TextAlign? align;
 
   const BaseText(
     this.text, {
     Key? key,
+    this.align,
     this.fontSize,
     this.fontWeight,
-    this.color = AppColor.primaryColor,
+    this.color,
     this.overflow,
   }) : super(key: key);
 
@@ -24,9 +26,10 @@ abstract class BaseText extends StatelessWidget {
       style: TextStyle(
         fontSize: fontSize,
         fontWeight: fontWeight,
-        color: color,
+        color: color ?? AppColor.primaryColor,
         overflow: overflow,
       ),
+      textAlign: align,
     );
   }
 }

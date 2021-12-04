@@ -6,6 +6,7 @@ class HeavyText extends BaseText {
     String text, {
     double? fontSize,
     Color? color,
+    TextAlign? align,
     TextOverflow? overflow,
   }) : super(
           text,
@@ -13,5 +14,6 @@ class HeavyText extends BaseText {
           fontSize: fontSize,
           color: color,
           overflow: overflow,
+          align: align,
         );
 }

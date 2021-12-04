@@ -33,7 +33,7 @@ class CoinApp extends StatelessWidget {
     final navigation = Provider.of<CoinNavigation>(context);
 
     return MaterialApp(
-      title: AppLocalizations.of(context)!.appName,
+      title: 'CoinApp',
       themeMode: AppTheme.themeMode,
       theme: AppTheme.theme,
       localizationsDelegates: const [

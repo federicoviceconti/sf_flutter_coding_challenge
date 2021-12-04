@@ -34,15 +34,25 @@ class BaseWidget extends StatelessWidget {
   }
 
   Widget _buildBottom(BuildContext context) {
-    if(bottom == null) return IgnorePointer();
-
     return Container(
-      width: MediaQuery.of(context).size.width,
-      child: Wrap(
-        children: [
-          bottom!,
+      decoration: BoxDecoration(
+        boxShadow: [
+          BoxShadow(
+            color: Colors.white,
+            blurRadius: 2.0,
+            spreadRadius: 4.0,
+          )
         ],
       ),
+      width: MediaQuery.of(context).size.width,
+      child: bottom != null
+          ? Padding(
+              padding: const EdgeInsets.only(
+                bottom: 16.0,
+              ),
+              child: bottom,
+            )
+          : IgnorePointer(),
     );
   }
 }

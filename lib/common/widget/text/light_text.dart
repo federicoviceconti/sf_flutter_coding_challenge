@@ -8,11 +8,13 @@ class LightText extends BaseText {
     double? fontSize,
     Color? color,
     TextOverflow? overflow,
+    TextAlign? align,
   }) : super(
           text,
           fontWeight: FontWeight.w200,
           fontSize: fontSize,
           color: color,
           overflow: overflow,
+          align: align,
         );
 }

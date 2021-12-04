@@ -8,11 +8,13 @@ class MediumText extends BaseText {
     double? fontSize,
     Color? color,
     TextOverflow? overflow,
+    TextAlign? align,
   }) : super(
           text,
           fontWeight: FontWeight.normal,
           fontSize: fontSize,
           color: color,
           overflow: overflow,
+          align: align,
         );
 }
