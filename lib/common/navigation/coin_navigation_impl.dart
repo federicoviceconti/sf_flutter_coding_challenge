@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/navigator.dart';
 import 'package:provider/provider.dart';
+import 'package:sf_flutter_coding_challenge/common/http/client/coincap_client.dart';
 import 'package:sf_flutter_coding_challenge/common/navigation/coin_navigation.dart';
+import 'package:sf_flutter_coding_challenge/functionalities/home_page/home_page_datamanager.dart';
+import 'package:sf_flutter_coding_challenge/functionalities/home_page/home_page_service.dart';
 import 'package:sf_flutter_coding_challenge/functionalities/home_page/home_page_viewmodel.dart';
 import 'package:sf_flutter_coding_challenge/functionalities/home_page/home_page_widget.dart';
 
@@ -61,7 +64,12 @@ class CoinNavigationImpl extends CoinNavigation<CoinRoute> {
         return _buildRoute(
           ChangeNotifierProvider(
             builder: (_, __) => const HomePageWidget(),
-            create: (ctx) => HomePageViewModel(),
+            create: (context) => HomePageViewModel(
+              dataManager: Provider.of<HomePageDataManager>(
+                context,
+                listen: false,
+              ),
+            ),
           ),
           settings,
         );

@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:sf_flutter_coding_challenge/common/theme/app_color.dart';
 
 class BaseWidget extends StatelessWidget {
   final Widget body;
   final Widget? bottom;
   final bool? safeTop;
   final bool? safeBottom;
+  final bool? showLoader;
 
   const BaseWidget({
     Key? key,
     required this.body,
+    this.showLoader,
     this.bottom,
     this.safeTop,
     this.safeBottom,
@@ -21,12 +24,17 @@ class BaseWidget extends StatelessWidget {
       bottom: safeBottom ?? false,
       child: Scaffold(
         backgroundColor: Theme.of(context).backgroundColor,
-        body: Column(
+        body: Stack(
           children: [
-            Expanded(
-              child: body,
+            Column(
+              children: [
+                Expanded(
+                  child: body,
+                ),
+                _buildBottom(context),
+              ],
             ),
-            _buildBottom(context),
+            _buildLoader(context),
           ],
         ),
       ),
@@ -47,12 +55,36 @@ class BaseWidget extends StatelessWidget {
       width: MediaQuery.of(context).size.width,
       child: bottom != null
           ? Padding(
-              padding: const EdgeInsets.only(
-                bottom: 16.0,
+              padding: const EdgeInsets.symmetric(
+                vertical: 10.0,
               ),
               child: bottom,
             )
           : IgnorePointer(),
+    );
+  }
+
+  Widget _buildLoader(
+    BuildContext context, {
+    bool showLoader = false,
+  }) {
+    if (!showLoader) return IgnorePointer();
+
+    final size = MediaQuery.of(context).size;
+
+    return Stack(
+      children: [
+        Container(
+          width: size.width,
+          height: size.height,
+          color: AppColor.primaryColor.withOpacity(0.2),
+        ),
+        Center(
+          child: CircularProgressIndicator(
+            color: AppColor.progressColor,
+          ),
+        ),
+      ],
     );
   }
 }

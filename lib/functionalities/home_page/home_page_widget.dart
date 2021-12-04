@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:sf_flutter_coding_challenge/common/images/coin_svg.dart';
 import 'package:sf_flutter_coding_challenge/common/theme/app_color.dart';
 import 'package:sf_flutter_coding_challenge/common/widget/base_state.dart';
@@ -7,6 +8,10 @@ import 'package:sf_flutter_coding_challenge/common/widget/text/heavy_text.dart';
 import 'package:sf_flutter_coding_challenge/common/widget/text/medium_text.dart';
 import 'dart:math' as math;
 
+import 'package:sf_flutter_coding_challenge/functionalities/home_page/home_page_viewmodel.dart';
+
+import 'model/expandable_asset_model.dart';
+
 class HomePageWidget extends StatefulWidget {
   const HomePageWidget({Key? key}) : super(key: key);
 
@@ -14,12 +19,23 @@ class HomePageWidget extends StatefulWidget {
   _HomePageWidgetState createState() => _HomePageWidgetState();
 }
 
-class _HomePageWidgetState extends BaseState<HomePageWidget> {
+class _HomePageWidgetState extends BaseState<HomePageWidget>
+    with WidgetsBindingObserver {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance!.addObserver(this);
+    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
+      Provider.of<HomePageViewModel>(context, listen: false).init();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return BaseWidget(
       body: _buildBody(),
       bottom: _buildBottomLayout(),
+      showLoader: Provider.of<HomePageViewModel>(context).showLoader,
       safeTop: true,
       safeBottom: true,
     );
@@ -92,21 +108,39 @@ class _HomePageWidgetState extends BaseState<HomePageWidget> {
   }
 
   Widget _buildPositionListView() {
-    return ListView.separated(
-      physics: NeverScrollableScrollPhysics(),
-      shrinkWrap: true,
-      itemBuilder: _buildPositionItemList,
-      padding: const EdgeInsets.symmetric(vertical: 16.0),
-      itemCount: 8,
-      separatorBuilder: (_, __) => Divider(
-        color: AppColor.dividerColor,
-        thickness: 1.2,
-      ),
+    return Consumer<HomePageViewModel>(
+      builder: (_, viewModel, __) {
+        return ListView.separated(
+          physics: NeverScrollableScrollPhysics(),
+          shrinkWrap: true,
+          itemBuilder: (ctx, index) {
+            final item = viewModel.assets[index];
+
+            return GestureDetector(
+              behavior: HitTestBehavior.translucent,
+              onTap: () => viewModel.onAssetItemTap(index),
+              child: _buildPositionItemList(
+                ctx,
+                item,
+              ),
+            );
+          },
+          padding: const EdgeInsets.symmetric(vertical: 16.0),
+          itemCount: viewModel.assets.length,
+          separatorBuilder: (_, __) => Divider(
+            color: AppColor.dividerColor,
+            thickness: 1.2,
+          ),
+        );
+      },
     );
   }
 
-  Widget _buildPositionItemList(BuildContext context, int index) {
-    final isExpanded = false;
+  Widget _buildPositionItemList(
+    BuildContext context,
+    ExpandableAssetModel asset,
+  ) {
+    final isExpanded = asset.isExpanded;
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 12.0),
@@ -117,14 +151,14 @@ class _HomePageWidgetState extends BaseState<HomePageWidget> {
             child: Column(
               children: [
                 _buildHeaderItem(
-                  coinAcronym: 'BTC',
-                  coinName: 'Bitcoin',
-                  coinValue: '\$10.391,79',
-                  increase: '+7,12%',
+                  coinAcronym: asset.acronym,
+                  coinName: asset.name,
+                  coinValue: asset.value,
+                  increase: asset.increase,
                 ),
                 Visibility(
                   visible: isExpanded,
-                  child: _buildExpandedItem(),
+                  child: _buildExpandedItem(asset),
                 )
               ],
             ),
@@ -249,28 +283,28 @@ class _HomePageWidgetState extends BaseState<HomePageWidget> {
 
   double _degreeToRad(double degree) => (degree) * math.pi / 180;
 
-  Widget _buildExpandedItem() {
+  Widget _buildExpandedItem(ExpandableAssetModel asset) {
     return Column(
       children: [
         SizedBox(height: 16.0),
         _buildRowPositionValue(
           localizations.homepageCoinItemActualPrice,
-          '\$4.345,00',
+          asset.actualPrice,
         ),
         SizedBox(height: 8.0),
         _buildRowPositionValue(
           localizations.homepageCoinItemVariation,
-          '\$2.123,00 (-3,33%)',
+          asset.variation,
         ),
         SizedBox(height: 8.0),
         _buildRowPositionValue(
           localizations.homepageCoinItemInWallet,
-          '3',
+          asset.inWallet,
         ),
         SizedBox(height: 8.0),
         _buildRowPositionValue(
           localizations.homepageCoinItemPositionValue,
-          '\$19.000,00',
+          asset.positionValue,
         ),
       ],
     );

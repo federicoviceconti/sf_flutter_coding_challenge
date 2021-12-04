@@ -6,6 +6,8 @@ import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
 import 'package:sf_flutter_coding_challenge/common/config/app_config.dart';
 import 'package:sf_flutter_coding_challenge/common/http/client/coincap_client.dart';
+import 'package:sf_flutter_coding_challenge/functionalities/home_page/home_page_datamanager.dart';
+import 'package:sf_flutter_coding_challenge/functionalities/home_page/home_page_service.dart';
 
 import 'common/config/coin_app_config.dart';
 import 'common/navigation/coin_navigation.dart';
@@ -69,6 +71,20 @@ class CoinApp extends StatelessWidget {
       ProxyProvider<AppConfig, CoinCapClient>(
         update: (_, AppConfig appConfig, __) {
           return CoinCapClient(appConfig);
+        },
+      ),
+      ProxyProvider<CoinCapClient, HomePageService>(
+        update: (_, CoinCapClient client, __) {
+          return HomePageService(
+            client: client,
+          );
+        },
+      ),
+      ProxyProvider<HomePageService, HomePageDataManager>(
+        update: (_, service, __) {
+          return HomePageDataManager(
+            service: service,
+          );
         },
       ),
     ];
