@@ -19,12 +19,12 @@ class BaseWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      top: safeTop ?? false,
-      bottom: safeBottom ?? false,
-      child: Scaffold(
-        backgroundColor: Theme.of(context).backgroundColor,
-        body: Stack(
+    return Scaffold(
+      backgroundColor: Theme.of(context).backgroundColor,
+      body: SafeArea(
+        top: safeTop ?? false,
+        bottom: safeBottom ?? false,
+        child: Stack(
           children: [
             Column(
               children: [
