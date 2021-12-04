@@ -5,6 +5,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
 import 'package:sf_flutter_coding_challenge/common/config/app_config.dart';
+import 'package:sf_flutter_coding_challenge/common/http/client/coincap_client.dart';
 
 import 'common/config/coin_app_config.dart';
 import 'common/navigation/coin_navigation.dart';
@@ -52,14 +53,23 @@ class CoinApp extends StatelessWidget {
   }
 
   List<SingleChildWidget> _initProviders() {
+    final apiKey = String.fromEnvironment("API_KEY");
+    final baseUrlCoinCap = String.fromEnvironment("COIN_CAP_BASE_URL");
+
     return [
       Provider<CoinNavigation>(
         create: (ctx) => CoinNavigationImpl(),
       ),
       Provider<AppConfig>(
         create: (ctx) => CoinAppConfig(
-          apiKey: String.fromEnvironment("API_KEY"),
+          apiKey: apiKey,
+          baseUrlCoinCap: baseUrlCoinCap,
         ),
+      ),
+      ProxyProvider<AppConfig, CoinCapClient>(
+        update: (_, AppConfig appConfig, __) {
+          return CoinCapClient(appConfig);
+        },
       ),
     ];
   }
