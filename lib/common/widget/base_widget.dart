@@ -65,11 +65,9 @@ class BaseWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildLoader(
-    BuildContext context, {
-    bool showLoader = false,
-  }) {
-    if (!showLoader) return IgnorePointer();
+  Widget _buildLoader(BuildContext context) {
+    final hasLoader = showLoader ?? false;
+    if (!hasLoader) return IgnorePointer();
 
     final size = MediaQuery.of(context).size;
 

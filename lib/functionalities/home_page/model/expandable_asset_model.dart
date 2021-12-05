@@ -9,7 +9,7 @@ class ExpandableAssetModel {
   final double? value;
   final double? increase;
   final double? actualPrice;
-  final String? variation;
+  double? variation;
   final double? inWallet;
 
   ExpandableAssetModel({
@@ -25,6 +25,8 @@ class ExpandableAssetModel {
   });
 
   String get valueFormatted => '${_formatCurrency(value)}';
+
+  String get variationFormatted => '${variation?.toStringAsFixed(2)}%';
 
   String get actualPriceFormatted => '${_formatCurrency(actualPrice)}';
 

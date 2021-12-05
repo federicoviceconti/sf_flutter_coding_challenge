@@ -322,7 +322,7 @@ class _HomePageWidgetState extends BaseState<HomePageWidget>
         SizedBox(height: 8.0),
         _buildRowPositionValue(
           localizations.homepageCoinItemVariation,
-          '',
+          asset.variationFormatted,
         ),
         SizedBox(height: 8.0),
         _buildRowPositionValue(

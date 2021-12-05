@@ -59,7 +59,7 @@ class HomePageDataManager {
                 acronym: asset.symbol,
                 value: (cryptoAmount?.amount ?? 0.0) * priceUsd,
                 increase: double.parse(asset.changePercent24Hr ?? '0.0'),
-                variation: asset.changePercent24Hr,
+                variation: double.parse(asset.changePercent24Hr ?? '0.0'),
                 actualPrice: priceUsd,
                 inWallet: cryptoAmount?.amount ?? 0.0,
               );
