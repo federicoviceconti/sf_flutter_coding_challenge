@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.sf_flutter_coding_challenge">
    <application
-        android:label="sf_flutter_coding_challenge"
+        android:label="Starting Finance Challenge"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
