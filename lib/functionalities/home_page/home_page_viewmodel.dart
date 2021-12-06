@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:intl/intl.dart';
+import 'package:sf_flutter_coding_challenge/common/utils/currency_helper.dart';
 import 'package:sf_flutter_coding_challenge/common/mixin/loader_mixin.dart';
 import 'package:sf_flutter_coding_challenge/common/provider/base_notifier.dart';
 import 'package:sf_flutter_coding_challenge/functionalities/home_page/home_page_datamanager.dart';
@@ -12,10 +12,7 @@ class HomePageViewModel extends BaseNotifier with LoaderMixin {
   final HomePageDataManager dataManager;
 
   String get investedCapitalFormatted {
-    return NumberFormat.simpleCurrency(
-      locale: 'en_US',
-      decimalDigits: 2,
-    ).format(_getInvestedCapital());
+    return CurrencyHelper.formatUsd(_getInvestedCapital());
   }
 
   double _getInvestedCapital() {
@@ -34,31 +31,31 @@ class HomePageViewModel extends BaseNotifier with LoaderMixin {
     final actual = _getActualAmount();
     final initial = _getInitial();
 
-    return '${NumberFormat.simpleCurrency(
-      locale: 'en_US',
-      decimalDigits: 2,
-    ).format(actual)} (${((actual / initial) - 1 * 100).toStringAsFixed(2)})%';
+    final percentage =
+        CurrencyHelper.getPercentage(initial: initial, current: actual)
+            .toStringAsFixed(2);
+
+    return actual <= 0
+        ? ''
+        : '${CurrencyHelper.formatUsd(actual)} ($percentage)%';
   }
 
   String get currentAmountFormatted {
-    return NumberFormat.simpleCurrency(
-      locale: 'en_US',
-      decimalDigits: 2,
-    ).format(_getCurrentAmount());
+    return CurrencyHelper.formatUsd(_getCurrentAmount());
   }
 
   double _getActualAmount() {
     return _assets.isNotEmpty
         ? _assets
-        .map((e) => e.actualPrice ?? 0.0)
-        .reduce((amountOne, amountTwo) => amountOne + amountTwo)
+            .map((e) => e.actualPrice ?? 0.0)
+            .reduce((amountOne, amountTwo) => amountOne + amountTwo)
         : 0.0;
   }
 
   double _getInitial() {
     return _userWalletInformation?.cryptos
-        .map((e) => e.initialUsdDollar)
-        .reduce((value, element) => value + element) ??
+            .map((e) => e.initialUsdDollar)
+            .reduce((value, element) => value + element) ??
         0.0;
   }
 
@@ -71,9 +68,7 @@ class HomePageViewModel extends BaseNotifier with LoaderMixin {
   }
 
   String get liquidityFormatted =>
-      NumberFormat.simpleCurrency(locale: 'en_US', decimalDigits: 2).format(
-        _getCurrentAmount() - _getInvestedCapital(),
-      );
+      CurrencyHelper.formatUsd(_getCurrentAmount() - _getInvestedCapital());
 
   double? _initialAmount;
 
@@ -109,16 +104,16 @@ class HomePageViewModel extends BaseNotifier with LoaderMixin {
     notifyListeners();
   }
 
-  void _initAssetTimer() {
+  Future<void> _initAssetTimer() async {
     showProgress();
 
-    _getAssets();
+    await _getAssets();
     Timer.periodic(Duration(seconds: 10), (timer) async {
       _getAssets();
     });
   }
 
-  void _getAssets() async {
+  Future<void> _getAssets() async {
     final coins = _userWalletInformation?.cryptos.map((e) => e.crypto).toList();
     final assets = await dataManager.getAssets(
       coins: coins,

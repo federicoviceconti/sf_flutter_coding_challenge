@@ -1,4 +1,5 @@
 import 'package:intl/intl.dart';
+import 'package:sf_flutter_coding_challenge/common/utils/currency_helper.dart';
 import 'package:sf_flutter_coding_challenge/functionalities/home_page/model/crypto_coin.dart';
 
 class ExpandableAssetModel {
@@ -33,7 +34,6 @@ class ExpandableAssetModel {
   String get increaseFormatted => '${_formatCurrency(increase)}';
 
   String _formatCurrency(double? value) {
-    return NumberFormat.simpleCurrency(decimalDigits: 2, locale: 'en_US')
-        .format(value ?? 0.0);
+    return CurrencyHelper.formatUsd(value ?? 0.0);
   }
 }
