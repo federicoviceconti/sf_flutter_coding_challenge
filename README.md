@@ -1,51 +1,20 @@
-![image](https://user-images.githubusercontent.com/50860347/133791102-b577d1a3-16a7-49bb-b65c-eceafbf21b1f.png)
+Simple project for retrieving crypto data from the [CoinCap APIs](https://docs.coincap.io/).
 
-[![style: flutter](https://img.shields.io/badge/Flutter-02569B?style=for-the-badge&logo=flutter&logoColor=white)](https://flutter.dev/)
+## Run information
 
-[![style: lint](https://img.shields.io/badge/style-lint-4BC0F5.svg)](https://pub.dev/packages/lint)
+Before running this app, you must specify the following environment variables:
 
-Welcome,
+- COIN_CAP_BASE_URL (endpoint, which is used to retrieve the data): For production stage you can use
+  the following configuration: --dart-define=COIN_CAP_BASE_URL=https://api.coincap.io
 
-If you made it here odds are you're beeing selected as the next **Starting Finance's Flutter
-Engineer**!
+- API_KEY: you can get it through [this link](https://coincap.io/api-key)
 
-Just one last step is required: To complete the almighty...
+All the configuration are stored into the config class [lib/common/config](https://github.com/federicoviceconti/sf_flutter_coding_challenge/tree/main/lib/common/config)
 
-# SF FLUTTER CODING CHALLENGE
+## Architecture
 
-In this challenge you will work with Coincap's Rest APIs to develop a Crypto Wallet.
+For the state management it's used the "Provider" [package](https://pub.dev/packages/provider).
+Every page has a view model associated (
+eg. [functionalities/home_page](https://github.com/federicoviceconti/sf_flutter_coding_challenge/tree/main/lib/functionalities/home_page))
 
-Let's assume that our user (you!), has opened positions on many cryptos: One BTC, some ETH, A bunch
-of DOGEs... you get the point.
-> A position is the amount of a security, asset, or property that is owned (or sold short) by some individual or other entity.
-
-
-Your Goal is to develop an APP that contains a **Crypto Wallet** (You will find a mockup at the end
-of this page), showing information about those positions:
-
-* Cryptos' prices and variations (in US Dollars);
-* Wallet's total value (in US Dollars);
-* Whatever you want, feel free to enrich the page with your personal touch (eg. charts).
-
-Features:
-
-* Wallet's and positions' value must always have the latest price (in polling);
-* The UI must be scalable, capable of handling many positions.
-
-## Step 1
-
-Get yourself an API Key from [Coincap](https://docs.coincap.io/).
-
-## Step 2
-
-Get yourself the latest [flutter](https://flutter.dev/docs/get-started/install) version.
-
-## Step 3
-
-Fork this repo and start coding!
-
-### MOCKUP
-
-> You will find Starting Finance's logo among the assets.
-
-![imageMock](https://user-images.githubusercontent.com/50860347/133791077-c3336e33-a233-4481-a82a-d1bd63eebb8b.png)
+For HTTP requests it's used the "http" [package](https://pub.dev/packages/http).
